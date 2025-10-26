@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Py-PaaS - Driftsätt App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 50px 0;
+        }
+        .deploy-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="deploy-card">
+            <h1 class="text-center mb-4">
+                <i class="bi bi-cloud-upload" style="color: #667eea;"></i>
+                Driftsätt Ny App
+            </h1>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('deploy') }}">
+                <div class="mb-4">
+                    <label for="github_url" class="form-label">
+                        <i class="bi bi-github"></i> GitHub Repository URL (HTTPS)
+                    </label>
+                    <input 
+                        type="url" 
+                        class="form-control form-control-lg" 
+                        id="github_url" 
+                        name="github_url" 
+                        placeholder="https://github.com/username/repository.git"
+                        required
+                    >
+                    <div class="form-text">
+                        Klistra in HTTPS-länken till ditt GitHub-repo som innehåller en Dockerfile
+                    </div>
+                </div>
+
+                <div class="info-box mb-4">
+                    <h6><i class="bi bi-info-circle"></i> Krav för repot:</h6>
+                    <ul class="mb-0">
+                        <li>Repot måste vara publikt (eller ha access)</li>
+                        <li>Repot måste innehålla en <code>Dockerfile</code></li>
+                        <li>Appen bör köra på port 5000 (standard för Flask)</li>
+                    </ul>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-rocket-takeoff"></i> Driftsätt Nu
+                    </button>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Tillbaka till Dashboard
+                    </a>
+                </div>
+            </form>
+
+            <div class="mt-4">
+                <h6 class="text-muted">Exempel på GitHub URLs:</h6>
+                <div class="small text-muted">
+                    <code>https://github.com/user/flask-hello-world.git</code><br>
+                    <code>https://github.com/user/my-web-app.git</code>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center text-white mt-4">
+            <p>&copy; 2025 Py-PaaS - Alexander, Anton & Vincent</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
